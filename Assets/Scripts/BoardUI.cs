@@ -23,21 +23,24 @@ public class BoardUI : MonoBehaviour
 
     public void UpdateBoard(Node _gameState)
     {
-        for(int i = 0; i < 42; i++)
+        for(int i = 0; i < 6; i++)
         {
-            switch (_gameState.Board[i % 6, i/7])
+            for (int j = 0; j < 7; j++)
             {
-                case Node.Tile.Empty:
-                    _tileTexts[i].text = "";
-                    break;
-                case Node.Tile.AI:
-                    _tileTexts[i].text = "O";
-                    break;
-                case Node.Tile.Opponent:
-                    _tileTexts[i].text = "X";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                switch (_gameState.Board[i, j % 7])
+                {
+                    case Node.Tile.Empty:
+                        _tileTexts[i * 7 + j].text = "";
+                        break;
+                    case Node.Tile.AI:
+                        _tileTexts[i * 7 + j].text = "O";
+                        break;
+                    case Node.Tile.Opponent:
+                        _tileTexts[i * 7 + j].text = "X";
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
     }

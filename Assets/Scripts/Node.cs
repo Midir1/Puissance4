@@ -13,7 +13,7 @@ public class Node
         Opponent
     }
 
-    public readonly Tile[,] Board = 
+    public readonly Tile[,] Board =
     {
         { Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty },
         { Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty },
@@ -23,23 +23,51 @@ public class Node
         { Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty }
     };
     
+    //Logic not good for horizontal and vertical
     public Tile IsAligned()
     {
         //Horizontal Vertical Alignment
-         for (int i = 0; i < 4; i++)
-         {
-             if (Board[i, 0] != Tile.Empty 
-                 && Board[i, 0] == Board[i, 1] 
-                 && Board[i, 0] == Board[i, 2] 
-                 && Board[i, 0] == Board[i, 3])
-                 return Board[i, 0];
-             
-             if (Board[0, i] != Tile.Empty 
-                 && Board[0, i] == Board[1, i] 
-                 && Board[0, i] == Board[2, i] 
-                 && Board[0, i] == Board[3, i])
-                 return Board[0, i];
-         }
+        for (int j = 0; j < 5; j++)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                if (Board[j, 0] != Tile.Empty 
+                    && Board[j, 0] == Board[i, 1] 
+                    && Board[j, 0] == Board[i, 2] 
+                    && Board[j, 0] == Board[i, 3])
+                    return Board[j, 0];
+
+            }
+        }
+        
+        for (int j = 0; j < 5; j++)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                
+                if (Board[0, i] != Tile.Empty 
+                    && Board[0, i] == Board[1, i] 
+                    && Board[0, i] == Board[2, i] 
+                    && Board[0, i] == Board[3, i])
+                    return Board[0, i];
+            }
+        }
+        
+        
+         // for (int i = 0; i < 4; i++)
+         // {
+         //     if (Board[i, 0] != Tile.Empty 
+         //         && Board[i, 0] == Board[i, 1] 
+         //         && Board[i, 0] == Board[i, 2] 
+         //         && Board[i, 0] == Board[i, 3])
+         //         return Board[i, 0];
+         //     
+         //     if (Board[0, i] != Tile.Empty 
+         //         && Board[0, i] == Board[1, i] 
+         //         && Board[0, i] == Board[2, i] 
+         //         && Board[0, i] == Board[3, i])
+         //         return Board[0, i];
+         // }
 
         //Diagonal Alignment
          for (int j = 0; j < 3; j++)
@@ -74,12 +102,13 @@ public class Node
         return Value;
     }
 
+    //Here
     public override string ToString()
     {
         string sOut = "";
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < 6; i++)
         {
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < 7; j++)
             {
                 switch (Board[i,j])
                 {
