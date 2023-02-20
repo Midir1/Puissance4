@@ -4,11 +4,11 @@ using UnityEngine.UI;
 
 public class BoardUI : MonoBehaviour
 {
-    private Text[] _tileTexts;
+    private Image[] _tileImages;
 
     private void Awake()
     {
-        _tileTexts = GetComponentsInChildren<Text>();
+        _tileImages = GetComponentsInChildren<Image>();
 
         MinMax minMax = FindObjectOfType<MinMax>();
 
@@ -30,13 +30,13 @@ public class BoardUI : MonoBehaviour
                 switch (_gameState.Board[i, j % 7])
                 {
                     case Node.Tile.Empty:
-                        _tileTexts[i * 7 + j].text = "";
+                        _tileImages[i * 7 + j].color = Color.white;
                         break;
                     case Node.Tile.AI:
-                        _tileTexts[i * 7 + j].text = "O";
+                        _tileImages[i * 7 + j].color = Color.red;
                         break;
                     case Node.Tile.Opponent:
-                        _tileTexts[i * 7 + j].text = "X";
+                        _tileImages[i * 7 + j].color = Color.yellow;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

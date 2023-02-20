@@ -1,15 +1,24 @@
 using System;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class MinMax : MonoBehaviour
 {
+    [SerializeField] private Algorithm currentAlgorithm;
     [SerializeField] private int CurrentValue;
     [SerializeField] private int Depth;
     
     private Node _currentState;
     private BoardUI _boardUI;
+    private bool _gameEnded;
 
+    private enum Algorithm
+    {
+        MinMax,
+        [UsedImplicitly] AlphaBeta
+    }
+    
     private void Start()
     {
         _boardUI = FindObjectOfType<BoardUI>();
@@ -75,46 +84,58 @@ public class MinMax : MonoBehaviour
         return min;
     }
 
-    // private int ComputeAlphaBeta(Node _node, int _depth, int _alpha = int.MinValue, int _beta = int.MaxValue)
-    // {
-    //     if (_depth == 0 || _node.Children.Count == 0) return _node.Evaluate();
-    //
-    //     int value;
-    //     
-    //     if (!_node.AITurn)
-    //     {
-    //         value = int.MaxValue;
-    //         foreach (Node child in _node.Children)
-    //         {
-    //             value = Math.Min(value, ComputeAlphaBeta(child,_depth - 1, _alpha, _beta));
-    //
-    //             if (_alpha >= value) return value;
-    //             _beta = Math.Min(_beta, value);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         value = int.MinValue;
-    //         foreach (Node child in _node.Children)
-    //         {
-    //             value = Math.Max(value, ComputeAlphaBeta(child, _depth - 1, _alpha, _beta));
-    //
-    //             if (value >= _beta) return value;
-    //             _alpha = Math.Max(_alpha, value);
-    //         }
-    //     }
-    //
-    //     return value;
-    // }
+    private int ComputeAlphaBeta(Node _node, int _depth, int _alpha = int.MinValue, int _beta = int.MaxValue)
+    {
+        if (_depth == 0 || _node.Children.Count == 0) return _node.Evaluate();
+    
+        int value;
+        
+        if (!_node.AITurn)
+        {
+            value = int.MaxValue;
+            foreach (Node child in _node.Children)
+            {
+                value = Math.Min(value, ComputeAlphaBeta(child,_depth - 1, _alpha, _beta));
+                _beta = Math.Min(_beta, value);
+    
+                if (_alpha > value) break;
+            }
+        }
+        else
+        {
+            value = int.MinValue;
+            foreach (Node child in _node.Children)
+            {
+                value = Math.Max(value, ComputeAlphaBeta(child, _depth - 1, _alpha, _beta));
+                _alpha = Math.Max(_alpha, value);
+    
+                if (value > _beta) break;
+            }
+        }
+
+        _node.Value = value;
+        return value;
+    }
 
     public void Play(int _id)
     {
+        if (_gameEnded) return;
         if (_currentState.Board[_id / 7, _id % 7] == Node.Tile.Empty)
         {
-            _currentState.Board[_id / 7, _id % 7] = Node.Tile.Opponent;
-            _boardUI.UpdateBoard(_currentState);
+            if (_id / 7 == 0 || (_id / 7 != 0 && _currentState.Board[(_id / 7) - 1, _id % 7] != Node.Tile.Empty))
+            {
+                _currentState.Board[_id / 7, _id % 7] = Node.Tile.Opponent;
+                _boardUI.UpdateBoard(_currentState);
 
-            PlayAI();
+                if (_currentState.IsAligned() == Node.Tile.Opponent)
+                {
+                    Debug.Log("Player Wins !");
+                    _gameEnded = true;
+                    return;
+                }
+
+                PlayAI();
+            }
         }
     }
 
@@ -122,10 +143,26 @@ public class MinMax : MonoBehaviour
     {
         _currentState.Children.Clear();
         _currentState.AITurn = true;
+
+        if (_currentState.Board[0, 3] == Node.Tile.Empty)
+        {
+            _currentState.Board[0, 3] = Node.Tile.AI;
+            _boardUI.UpdateBoard(_currentState);
+            return;
+        }
+        
         BuildTree(_currentState, Depth);
-        CurrentValue = ComputeMinMax(_currentState, Depth);
-        //CurrentValue = ComputeAlphaBeta(_currentState, Depth);
+        
+        CurrentValue = currentAlgorithm == Algorithm.MinMax ? 
+            ComputeMinMax(_currentState, Depth) : ComputeAlphaBeta(_currentState, Depth);
+        
         _currentState = _currentState.Children.First(_n => _n.Value == CurrentValue);
         _boardUI.UpdateBoard(_currentState);
+        
+        if (_currentState.IsAligned() == Node.Tile.AI)
+        {
+            Debug.Log("AI Wins !");
+            _gameEnded = true;
+        }
     }
 }

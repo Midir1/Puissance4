@@ -171,29 +171,4 @@ public class Node
 
         return Value;
     }
-    
-    public override string ToString()
-    {
-        string sOut = "";
-        for(int i = 0; i < 6; i++)
-        {
-            for (int j = 0; j < 7; j++)
-            {
-                switch (Board[i,j])
-                {
-                    case Tile.Empty:
-                        sOut += "_ ";
-                        break;
-                    case Tile.AI:
-                        sOut += "O ";
-                        break;
-                    case Tile.Opponent:
-                        sOut += "X ";
-                        break;
-                }
-            }
-            sOut += "\n";
-        }
-        return sOut;
-    }
 }
