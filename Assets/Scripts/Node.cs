@@ -23,86 +23,155 @@ public class Node
         { Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty, Tile.Empty }
     };
     
-    //Logic not good for horizontal and vertical
     public Tile IsAligned()
     {
-        //Horizontal Vertical Alignment
-        for (int j = 0; j < 5; j++)
+        for (int i = 0; i < 7; i++)
         {
-            for (int i = 0; i < 4; i++)
-            {
-                if (Board[j, 0] != Tile.Empty 
-                    && Board[j, 0] == Board[i, 1] 
-                    && Board[j, 0] == Board[i, 2] 
-                    && Board[j, 0] == Board[i, 3])
-                    return Board[j, 0];
-
-            }
-        }
-        
-        for (int j = 0; j < 5; j++)
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                
-                if (Board[0, i] != Tile.Empty 
-                    && Board[0, i] == Board[1, i] 
-                    && Board[0, i] == Board[2, i] 
-                    && Board[0, i] == Board[3, i])
-                    return Board[0, i];
-            }
-        }
-        
-        
-         // for (int i = 0; i < 4; i++)
-         // {
-         //     if (Board[i, 0] != Tile.Empty 
-         //         && Board[i, 0] == Board[i, 1] 
-         //         && Board[i, 0] == Board[i, 2] 
-         //         && Board[i, 0] == Board[i, 3])
-         //         return Board[i, 0];
-         //     
-         //     if (Board[0, i] != Tile.Empty 
-         //         && Board[0, i] == Board[1, i] 
-         //         && Board[0, i] == Board[2, i] 
-         //         && Board[0, i] == Board[3, i])
-         //         return Board[0, i];
-         // }
-
-        //Diagonal Alignment
-         for (int j = 0; j < 3; j++)
-         {
-             for (int i = 0; i < 4; i++)
+             for (int j = 0; j < 6; j++)
              {
-                 if (Board[j, i] != Tile.Empty 
-                     && Board[j, i] == Board[j + 1, i + 1] 
-                     && Board[j, i] == Board[j + 2, i + 2] 
-                     && Board[j, i] == Board[j + 3, i + 3]) 
-                     return Board[j, i];
-             
-                 if (Board[j, 6 - i] != Tile.Empty 
-                     && Board[j, 6 - i] == Board[j + 1, 5 - i] 
-                     && Board[j, 6 - i] == Board[j + 2, 4 - i] 
-                     && Board[j, 6 - i] == Board[j + 3, 3 - i] ) 
-                     return Board[j, 6 - i];
+                 //Horizontal Alignment
+                 if (i < 4)
+                 {
+                     if (Board[j, i] != Tile.Empty 
+                         && Board[j, i] == Board[j, i + 1] 
+                         && Board[j, i] == Board[j, i + 2] 
+                         && Board[j, i] == Board[j, i + 3])
+                         return Board[j, i];
+                 }
+
+                 //Vertical Alignment
+                 if (j < 3)
+                 {
+                     if (Board[j, i] != Tile.Empty 
+                         && Board[j, i] == Board[j + 1, i] 
+                         && Board[j, i] == Board[j + 2, i] 
+                         && Board[j, i] == Board[j + 3, i])
+                         return Board[j, i];
+                 }
+
+                 //Diagonal Alignment
+                 if (i < 4 && j < 3)
+                 {
+                     if (Board[j, i] != Tile.Empty 
+                         && Board[j, i] == Board[j + 1, i + 1] 
+                         && Board[j, i] == Board[j + 2, i + 2] 
+                         && Board[j, i] == Board[j + 3, i + 3]) 
+                         return Board[j, i];
+                     
+                     if (Board[j, 6 - i] != Tile.Empty 
+                         && Board[j, 6 - i] == Board[j + 1, 5 - i] 
+                         && Board[j, 6 - i] == Board[j + 2, 4 - i] 
+                         && Board[j, 6 - i] == Board[j + 3, 3 - i] ) 
+                         return Board[j, 6 - i];
+                 }
              }
-         }
+        }
+
+        return Tile.Empty;
+    }
+
+    private Tile IsAligned(ref int _value)
+    {
+        for (int i = 0; i < 7; i++)
+        {
+             for (int j = 0; j < 6; j++)
+             {
+                 //Horizontal Alignment
+                 if (i < 4)
+                 {
+                     if (Board[j, i] != Tile.Empty)
+                     {
+                         if (Board[j, i] == Board[j, i + 1])
+                         {
+                             if (Board[j, i] == Tile.AI) _value = 10;
+                             else _value = -10;
+                             
+                             if (Board[j, i] == Board[j, i + 2])
+                             {
+                                 if (Board[j, i] == Tile.AI) _value = 25;
+                                 else _value = -25;
+                                 
+                                 if(Board[j, i] == Board[j, i + 3]) return Board[j, i];
+                             }
+                         }
+                     }
+                     
+                 }
+
+                 //Vertical Alignment
+                 if (j < 3)
+                 {
+                     if (Board[j, i] != Tile.Empty)
+                     {
+                         if (Board[j, i] == Board[j + 1, i])
+                         {
+                             if (Board[j, i] == Tile.AI) _value = 10;
+                             else _value = -10;
+                             
+                             if (Board[j, i] == Board[j + 2, i])
+                             {
+                                 if (Board[j, i] == Tile.AI) _value = 25;
+                                 else _value = -25;
+                                 
+                                 if(Board[j, i] == Board[j + 3, i]) return Board[j, i];
+                             }
+                         }
+                     }
+                 }
+
+                 //Diagonal Alignment
+                 if (i < 4 && j < 3)
+                 {
+                     if (Board[j, i] != Tile.Empty)
+                     {
+                         if (Board[j, i] == Board[j + 1, i + 1])
+                         {
+                             if (Board[j, i] == Tile.AI) _value = 10;
+                             else _value = -10;
+                             
+                             if (Board[j, i] == Board[j + 2, i + 2])
+                             {
+                                 if (Board[j, i] == Tile.AI) _value = 25;
+                                 else _value = -25;
+                                 
+                                 if(Board[j, i] == Board[j + 3, i + 3]) return Board[j, i];
+                             }
+                         }
+                     }
+                     
+                     if (Board[j, 6 - i] != Tile.Empty)
+                     {
+                         if (Board[j, 6 - i] == Board[j + 1, 5 - i]) 
+                         {
+                             if (Board[j, 6 - i] == Tile.AI) _value = 10;
+                             else _value = -10;
+                             
+                             if (Board[j, 6 - i] == Board[j + 2, 4 - i] )
+                             {
+                                 if (Board[j, 6 - i] == Tile.AI) _value = 25;
+                                 else _value = -25;
+                                 
+                                 if(Board[j, 6 - i] == Board[j + 3, 3 - i]) return Board[j, 6 - i];
+                             }
+                         }
+                     }
+                 }
+             }
+        }
 
         return Tile.Empty;
     }
 
     public int Evaluate()
     {
-        Tile result = IsAligned();
+        Tile result = IsAligned(ref Value);
         
         if(result == Tile.AI) Value = 100;
         else if (result == Tile.Opponent) Value = - 100;
-        else Value = 0;
-           
+
         return Value;
     }
-
-    //Here
+    
     public override string ToString()
     {
         string sOut = "";

@@ -51,7 +51,7 @@ public class MinMax : MonoBehaviour
     private int ComputeMinMax(Node _node, int _depth)
     {
         if(_depth == 0 || _node.Children.Count == 0) return _node.Evaluate();
-
+    
         if(_node.AITurn) // Max Node
         {
             int max = int.MinValue;
@@ -75,6 +75,38 @@ public class MinMax : MonoBehaviour
         return min;
     }
 
+    // private int ComputeAlphaBeta(Node _node, int _depth, int _alpha = int.MinValue, int _beta = int.MaxValue)
+    // {
+    //     if (_depth == 0 || _node.Children.Count == 0) return _node.Evaluate();
+    //
+    //     int value;
+    //     
+    //     if (!_node.AITurn)
+    //     {
+    //         value = int.MaxValue;
+    //         foreach (Node child in _node.Children)
+    //         {
+    //             value = Math.Min(value, ComputeAlphaBeta(child,_depth - 1, _alpha, _beta));
+    //
+    //             if (_alpha >= value) return value;
+    //             _beta = Math.Min(_beta, value);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         value = int.MinValue;
+    //         foreach (Node child in _node.Children)
+    //         {
+    //             value = Math.Max(value, ComputeAlphaBeta(child, _depth - 1, _alpha, _beta));
+    //
+    //             if (value >= _beta) return value;
+    //             _alpha = Math.Max(_alpha, value);
+    //         }
+    //     }
+    //
+    //     return value;
+    // }
+
     public void Play(int _id)
     {
         if (_currentState.Board[_id / 7, _id % 7] == Node.Tile.Empty)
@@ -92,6 +124,7 @@ public class MinMax : MonoBehaviour
         _currentState.AITurn = true;
         BuildTree(_currentState, Depth);
         CurrentValue = ComputeMinMax(_currentState, Depth);
+        //CurrentValue = ComputeAlphaBeta(_currentState, Depth);
         _currentState = _currentState.Children.First(_n => _n.Value == CurrentValue);
         _boardUI.UpdateBoard(_currentState);
     }
