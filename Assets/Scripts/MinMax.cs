@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class MinMax : MonoBehaviour
 {
+    public int Depth;
+    
     [SerializeField] private Algorithm currentAlgorithm;
     [SerializeField] private int CurrentValue;
-    [SerializeField] private int Depth;
     
     private Node _currentState;
     private BoardUI _boardUI;
@@ -19,14 +20,14 @@ public class MinMax : MonoBehaviour
         [UsedImplicitly] AlphaBeta
     }
     
-    private void Start()
+    public void StartMinMax(bool _aiPlayFirst)
     {
         _boardUI = FindObjectOfType<BoardUI>();
 
         _currentState = new Node();
         _boardUI.UpdateBoard(_currentState);
 
-        //PlayAI();
+        if(_aiPlayFirst) PlayAI();
     }
     
     private void BuildTree(Node _node, int _depth)
