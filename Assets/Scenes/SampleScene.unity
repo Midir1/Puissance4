@@ -3071,7 +3071,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentValue: 0
-  Depth: 5
+  Depth: 6
 --- !u!4 &759509573
 Transform:
   m_ObjectHideFlags: 0
