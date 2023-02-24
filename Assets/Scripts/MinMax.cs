@@ -1,21 +1,17 @@
 using System;
 using JetBrains.Annotations;
-using UnityEngine;
 
-public class MinMax : MonoBehaviour
+public class MinMax
 {
-    public Algorithm CurrentAlgorithm;
+    public const Algorithm CurrentAlgorithm = Algorithm.AlphaBeta;
     public int CurrentValue;
     public int Depth;
-    public Node CurrentState;
     
     public enum Algorithm
     {
         MinMax,
-        [UsedImplicitly] AlphaBeta
+        AlphaBeta
     }
-    
-    private void Start() => CurrentState = new Node();
 
     public static void BuildTree(Node _node, int _depth)
     {

@@ -168,7 +168,7 @@ public class Node
         Tile result = IsAligned(ref Value);
         
         if(result == Tile.AI) Value = 10000;
-        else if (result == Tile.Opponent) Value = - 10000;
+        else if (result == Tile.Opponent) Value = -10000;
 
         return Value;
     }
