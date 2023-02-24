@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuHandler : MonoBehaviour
@@ -14,6 +15,10 @@ public class MenuHandler : MonoBehaviour
     [SerializeField] private TMP_Text ComplexityText2;
     [SerializeField] private Button PlayButton1;
     
+    [Header("Views")]
+    [SerializeField] private GameObject Background2D;
+    [SerializeField] private GameObject Board2D;
+
     private Game _game;
     private MinMax _minMax, _minMax1;
     private bool _hasSetAI1Complexity, _hasSetAI2Complexity;
@@ -102,6 +107,17 @@ public class MenuHandler : MonoBehaviour
     {
         _game.CurrentMode = Game.Mode.AIVsAI;
         _game.PlayAI();
+    }
+
+    public void SwitchView()
+    {
+        Background2D.SetActive(!Background2D.activeSelf);
+        Board2D.SetActive(!Board2D.activeSelf);
+    }
+    
+    public void ReloadGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void Quit() => Application.Quit();
