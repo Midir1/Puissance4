@@ -10,7 +10,8 @@ public class Node
     {
         Empty,
         AI,
-        Opponent
+        Opponent,
+        Opponent1
     }
 
     public readonly Tile[,] Board =

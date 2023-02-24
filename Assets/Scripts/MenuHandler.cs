@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,43 +5,52 @@ using UnityEngine.UI;
 public class MenuHandler : MonoBehaviour
 {
     [Header("PlayerVsAI")]
-    [SerializeField] private TMP_Text complexityText;
-    [SerializeField] private Button playButton;
-    [SerializeField] private Toggle aiPlayFirstToggle;
+    [SerializeField] private TMP_Text ComplexityText;
+    [SerializeField] private Button PlayButton;
+    [SerializeField] private Toggle AIPlayFirstToggle;
     
-    private MinMax minMax;
+    private MinMax _minMax;
+    private Game _game;
 
     private void Start()
     {
-        minMax = FindObjectOfType<MinMax>();
+        _minMax = FindObjectOfType<MinMax>();
+        _game = FindObjectOfType<Game>();
     }
 
     public void SetEasyAIComplexity()
     {
-        minMax.Depth = 2;
+        _minMax.Depth = 2;
 
-        complexityText.text = "Easy";
-        playButton.interactable = true;
+        ComplexityText.text = "Easy";
+        PlayButton.interactable = true;
     }
     
     public void SetMediumAIComplexity()
     {
-        minMax.Depth = 4;
+        _minMax.Depth = 4;
         
-        complexityText.text = "Medium";
-        playButton.interactable = true;
+        ComplexityText.text = "Medium";
+        PlayButton.interactable = true;
     }
     
     public void SetHardAIComplexity()
     {
-        minMax.Depth = 6;
+        _minMax.Depth = 6;
         
-        complexityText.text = "Hard";
-        playButton.interactable = true;
+        ComplexityText.text = "Hard";
+        PlayButton.interactable = true;
     }
 
-    public void PlayGame()
+    public void LaunchPlayerVsAI()
     {
-        minMax.StartMinMax(aiPlayFirstToggle.isOn);
+        if(AIPlayFirstToggle.isOn) _game.PlayAI();
     }
+    
+    public void LaunchPlayerVsPlayer()
+    {
+        _game.CurrentMode = Game.Mode.PlayerVsPlayer;
+    }
+
+    public void Quit() => Application.Quit();
 }

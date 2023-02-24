@@ -10,13 +10,13 @@ public class BoardUI : MonoBehaviour
     {
         _tileImages = GetComponentsInChildren<Image>();
 
-        MinMax minMax = FindObjectOfType<MinMax>();
+        Game game = FindObjectOfType<Game>();
 
         int id = 0;
         foreach(var button in GetComponentsInChildren<Button>())
         {
             int buttonId = id;
-            button.onClick.AddListener(() => minMax.Play(buttonId));
+            button.onClick.AddListener(() => game.Play(buttonId));
             id++;
         }
     }
@@ -27,20 +27,14 @@ public class BoardUI : MonoBehaviour
         {
             for (int j = 0; j < 7; j++)
             {
-                switch (_gameState.Board[i, j % 7])
+                _tileImages[i * 7 + j].color = _gameState.Board[i, j % 7] switch
                 {
-                    case Node.Tile.Empty:
-                        _tileImages[i * 7 + j].color = Color.white;
-                        break;
-                    case Node.Tile.AI:
-                        _tileImages[i * 7 + j].color = Color.red;
-                        break;
-                    case Node.Tile.Opponent:
-                        _tileImages[i * 7 + j].color = Color.yellow;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                    Node.Tile.Empty => Color.white,
+                    Node.Tile.AI => Color.red,
+                    Node.Tile.Opponent => Color.yellow,
+                    Node.Tile.Opponent1 => Color.red,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
             }
         }
     }
